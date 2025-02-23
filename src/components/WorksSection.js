@@ -1,8 +1,8 @@
 // src/components/WorksSection.js
 
-import React, { memo } from "react";
+import React, { memo, useState, useEffect } from "react";
 import Image from "next/image";
-import { projects } from "../data/projectsData";
+import { getProjects } from "../data/projectsData";
 
 /**
  * セクションヘッダーコンポーネント
@@ -100,13 +100,29 @@ ProjectCard.displayName = 'ProjectCard';
 /**
  * プロジェクトグリッドコンポーネント
  */
-const ProjectGrid = memo(() => (
-  <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-    {projects.map((project) => (
-      <ProjectCard key={project.id} project={project} />
-    ))}
-  </div>
-));
+const ProjectGrid = memo(({ projects, loading }) => {
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="animate-pulse bg-white/5 rounded-xl h-[400px]"
+            aria-hidden="true"
+          />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {projects.map((project) => (
+        <ProjectCard key={project.id} project={project} />
+      ))}
+    </div>
+  );
+});
 
 ProjectGrid.displayName = 'ProjectGrid';
 
@@ -115,6 +131,21 @@ ProjectGrid.displayName = 'ProjectGrid';
  * プロジェクト一覧を表示する
  */
 const WorksSection = () => {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getProjects()
+      .then((data) => {
+        setProjects(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('プロジェクトデータの取得に失敗:', error);
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <section
       id="works"
@@ -123,7 +154,7 @@ const WorksSection = () => {
     >
       <div className="mx-auto max-w-7xl">
         <SectionHeader />
-        <ProjectGrid />
+        <ProjectGrid projects={projects} loading={loading} />
       </div>
     </section>
   );
