@@ -1,20 +1,93 @@
-import React, { useRef, useEffect } from "react";
-import MenuItem from "./MenuItem";
+// src/components/Header.js
 
+import React, { useRef, useCallback } from "react";
+import MenuItem from "./MenuItem";
+import { useEscapeKey } from "../hooks/useEscapeKey";
+import { useAnimation } from "../hooks/useAnimation";
+
+/**
+ * モバイルメニューコンポーネント
+ * @param {Object} props
+ * @param {Array<{ name: string, type: string, href: string }>} props.menuItems - メニュー項目の配列
+ * @param {string} props.activeSection - 現在のアクティブなセクション
+ * @param {Function} props.setActiveSection - アクティブセクション変更ハンドラー
+ * @param {Function} props.toggleMenu - メニュー開閉ハンドラー
+ * @param {boolean} props.isMenuOpen - メニューの開閉状態
+ */
+const MobileMenu = ({ menuItems, activeSection, setActiveSection, toggleMenu, isMenuOpen }) => {
+  const menuRef = useRef(null);
+  const { animationClass } = useAnimation(isMenuOpen, {
+    enter: "max-h-96 opacity-100",
+    exit: "max-h-0 opacity-0 invisible",
+    duration: 300
+  });
+
+  const handleItemClick = useCallback((section) => {
+    setActiveSection(section);
+    toggleMenu();
+  }, [setActiveSection, toggleMenu]);
+
+  return (
+    <div
+      id="mobile-menu"
+      ref={menuRef}
+      className={`md:hidden transition-all duration-300 ease-in-out ${animationClass}`}
+      aria-hidden={!isMenuOpen}
+    >
+      <nav className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-[#1e40af]/90 backdrop-blur-sm">
+        {menuItems.map((item) => (
+          <MenuItem
+            key={item.name}
+            item={item}
+            activeSection={activeSection}
+            onClick={handleItemClick}
+            isMobile={true}
+          />
+        ))}
+      </nav>
+    </div>
+  );
+};
+
+/**
+ * メインナビゲーションコンポーネント
+ * @param {Object} props
+ * @param {Array<{ name: string, type: string, href: string }>} props.menuItems - メニュー項目の配列
+ * @param {string} props.activeSection - 現在のアクティブなセクション
+ * @param {Function} props.setActiveSection - アクティブセクション変更ハンドラー
+ */
+const MainNavigation = ({ menuItems, activeSection, setActiveSection }) => (
+  <nav
+    className="items-center hidden space-x-8 md:flex"
+    aria-label="メインナビゲーション"
+  >
+    {menuItems.map((item) => (
+      <MenuItem
+        key={item.name}
+        item={item}
+        activeSection={activeSection}
+        onClick={setActiveSection}
+      />
+    ))}
+  </nav>
+);
+
+/**
+ * ヘッダーコンポーネント
+ * ナビゲーションとモバイルメニューを含むサイトのヘッダー部分
+ * 
+ * @param {Object} props
+ * @param {Array<{ name: string, type: string, href: string }>} props.menuItems - メニュー項目の配列
+ * @param {string} props.activeSection - 現在のアクティブなセクション
+ * @param {Function} props.toggleMenu - メニュー開閉ハンドラー
+ * @param {boolean} props.isMenuOpen - メニューの開閉状態
+ * @param {Function} props.setActiveSection - アクティブセクション変更ハンドラー
+ */
 const Header = ({ menuItems, activeSection, toggleMenu, isMenuOpen, setActiveSection }) => {
   const headerRef = useRef(null);
-  const mobileMenuRef = useRef(null);
 
-  useEffect(() => {
-    const handleEscapeKey = (e) => {
-      if (e.key === 'Escape' && isMenuOpen) {
-        toggleMenu();
-      }
-    };
-
-    document.addEventListener('keydown', handleEscapeKey);
-    return () => document.removeEventListener('keydown', handleEscapeKey);
-  }, [isMenuOpen, toggleMenu]);
+  // Escapeキーでメニューを閉じる
+  useEscapeKey(isMenuOpen ? toggleMenu : null);
 
   return (
     <header
@@ -24,6 +97,7 @@ const Header = ({ menuItems, activeSection, toggleMenu, isMenuOpen, setActiveSec
       <div className="bg-[#1d4ed8] bg-opacity-50 border-b border-[#3b82f6]/20">
         <div className="container px-4 mx-auto sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
+            {/* サイトタイトル */}
             <div className="flex-shrink-0">
               <button
                 type="button"
@@ -35,20 +109,14 @@ const Header = ({ menuItems, activeSection, toggleMenu, isMenuOpen, setActiveSec
               </button>
             </div>
 
-            <nav
-              className="items-center hidden space-x-8 md:flex"
-              aria-label="メインナビゲーション"
-            >
-              {menuItems.map((item) => (
-                <MenuItem
-                  key={item.name}
-                  item={item}
-                  activeSection={activeSection}
-                  onClick={setActiveSection}
-                />
-              ))}
-            </nav>
+            {/* デスクトップナビゲーション */}
+            <MainNavigation
+              menuItems={menuItems}
+              activeSection={activeSection}
+              setActiveSection={setActiveSection}
+            />
 
+            {/* モバイルメニューボタン */}
             <div className="md:hidden">
               <button
                 type="button"
@@ -68,29 +136,13 @@ const Header = ({ menuItems, activeSection, toggleMenu, isMenuOpen, setActiveSec
         </div>
 
         {/* モバイルメニュー */}
-        <div
-          id="mobile-menu"
-          ref={mobileMenuRef}
-          className={`md:hidden transition-all duration-300 ease-in-out ${
-            isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 invisible'
-          }`}
-          aria-hidden={!isMenuOpen}
-        >
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-[#1e40af]/90 backdrop-blur-sm">
-            {menuItems.map((item) => (
-              <MenuItem
-                key={item.name}
-                item={item}
-                activeSection={activeSection}
-                onClick={(section) => {
-                  setActiveSection(section);
-                  toggleMenu();
-                }}
-                isMobile={true}
-              />
-            ))}
-          </div>
-        </div>
+        <MobileMenu
+          menuItems={menuItems}
+          activeSection={activeSection}
+          setActiveSection={setActiveSection}
+          toggleMenu={toggleMenu}
+          isMenuOpen={isMenuOpen}
+        />
       </div>
     </header>
   );
