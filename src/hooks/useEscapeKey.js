@@ -1,22 +1,34 @@
+// =============================
 // src/hooks/useEscapeKey.js
+// Escapeキー押下時のハンドラーを設定するカスタムフック
+// =============================
 
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 /**
- * Escapeキー押下時のハンドラーを設定するカスタムフック
- * @param {Function|null} handler - Escapeキー押下時に実行する関数
+ * Escapeキー押下時に指定のハンドラーを実行するカスタムフック
+ * @param {Function|null} handler - Escapeキー押下時に実行する関数（nullの場合は無効）
  */
 export const useEscapeKey = (handler) => {
   useEffect(() => {
-    if (!handler) return;
+    if (typeof handler !== "function") return;
 
-    const handleEscapeKey = (e) => {
-      if (e.key === 'Escape') {
+    /**
+     * Escapeキーのイベントリスナー
+     * @param {KeyboardEvent} event - キーボードイベント
+     */
+    const handleEscapeKey = (event) => {
+      if (event.key === "Escape") {
         handler();
       }
     };
 
-    document.addEventListener('keydown', handleEscapeKey);
-    return () => document.removeEventListener('keydown', handleEscapeKey);
+    // イベントリスナーを追加
+    document.addEventListener("keydown", handleEscapeKey);
+
+    // クリーンアップ関数
+    return () => {
+      document.removeEventListener("keydown", handleEscapeKey);
+    };
   }, [handler]);
 };

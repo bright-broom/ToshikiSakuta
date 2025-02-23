@@ -1,24 +1,51 @@
+// =============================
 // src/data/menuItems.js
+// メニュー項目のデータを定義するモジュール
+// =============================
 
+/**
+ * メニュー項目の型定義
+ * @typedef {Object} MenuItem
+ * @property {string} name - メニュー名
+ * @property {"link" | "icon"} category - メニューのカテゴリ
+ * @property {string} href - 遷移先URLまたはメールアドレス
+ * @property {string} [icon] - アイコン名 (カテゴリが"icon"の場合のみ)
+ * @property {"fab" | "fas"} [iconType] - FontAwesomeアイコンタイプ (カテゴリが"icon"の場合のみ)
+ */
+
+/** 
+ * ナビゲーションメニュー一覧
+ * @type {MenuItem[]}
+ */
 const MENU_ITEMS = [
-  { name: "Home", type: "link", href: "#home" },
-  { name: "Works", type: "link", href: "#works" },
-  { name: "About", type: "link", href: "#about" },
+  // =============================
+  // ページ内リンク
+  // =============================
+  { name: "Home", category: "link", href: "#home" },
+  { name: "Works", category: "link", href: "#works" },
+  { name: "About", category: "link", href: "#about" },
+
+  // =============================
+  // 外部リンク・アイコンボタン
+  // =============================
   {
-    name: "github",
-    type: "icon",
+    name: "GitHub",
+    category: "icon",
+    icon: "github",
     iconType: "fab",
     href: "https://github.com/KoenigWolf",
   },
   {
-    name: "qiita",
-    type: "icon",
-    iconType: "fas",  // "fab"はブランド系のアイコンに使用されますが、Font Awesomeにqiitaアイコンがない場合は"fas"を使用
+    name: "Qiita",
+    category: "icon",
+    icon: "qiita",
+    iconType: "fas", // QiitaのFontAwesomeアイコンがないため "fas" に設定
     href: "https://qiita.com/KoenigWolf",
   },
   {
-    name: "envelope",
-    type: "icon",
+    name: "Contact",
+    category: "icon",
+    icon: "envelope",
     iconType: "fas",
     href: "mailto:toshikiii7@gmail.com",
   },

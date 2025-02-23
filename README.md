@@ -119,33 +119,7 @@ gitmojiを使用した意味のある絵文字とコミットメッセージ：
 - コンポーネントローカル状態の適切な使用
 - メモ化による再レンダリング最適化
 
-## 🗺 開発ロードマップ
-
-### 短期目標（1-2ヶ月）
-- [ ] TypeScriptへの完全移行
-- [ ] ユニットテストカバレッジ80%以上
-- [ ] スケルトンローディングの実装
-- [ ] アニメーションの改善
-
-### 中期目標（3-6ヶ月）
-- [ ] マイクロフロントエンド化
-- [ ] StoryBookによるUIドキュメント
-- [ ] E2Eテストの導入
-- [ ] パフォーマンスモニタリング
-
-### 長期目標（6ヶ月以上）
-- [ ] PWA対応
-- [ ] 国際化対応
-- [ ] AIによる動的コンテンツ生成
-- [ ] WebAssemblyによる最適化
-
 ## 📊 パフォーマンスモニタリング
-
-### 監視指標
-- First Contentful Paint (FCP)
-- Largest Contentful Paint (LCP)
-- Time to Interactive (TTI)
-- Cumulative Layout Shift (CLS)
 
 ### ツール
 - Lighthouse CI
@@ -165,12 +139,6 @@ gitmojiを使用した意味のある絵文字とコミットメッセージ：
 - アクセシビリティ
 - セキュリティ
 - 保守性
-
-## 📫 連絡先
-
-- Email: toshikiii7@gmail.com
-- GitHub: [@KoenigWolf](https://github.com/KoenigWolf)
-- Qiita: [@KoenigWolf](https://qiita.com/KoenigWolf)
 
 ## 📄 ライセンス
 

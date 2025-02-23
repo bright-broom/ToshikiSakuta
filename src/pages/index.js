@@ -1,7 +1,14 @@
+// =============================
 // src/pages/index.js
-import React from 'react';
-import App from '../App';
+// Next.js のルートページ
+// =============================
 
+import App from "../App";
+
+/**
+ * ルートページ（/）
+ * @returns {JSX.Element} アプリのメインコンポーネント
+ */
 export default function Home() {
   return <App />;
 }
