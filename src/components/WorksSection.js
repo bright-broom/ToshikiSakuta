@@ -2,7 +2,7 @@
 
 import React, { memo, useState, useEffect } from "react";
 import Image from "next/image";
-import { getProjects } from "../data/projectsData";
+import { DEFAULT_IMAGE } from "../data/projectsData";
 
 /**
  * セクションヘッダーコンポーネント
@@ -22,23 +22,35 @@ SectionHeader.displayName = 'SectionHeader';
 
 /**
  * プロジェクト画像コンポーネント
+ * 外部OG画像はホストが任意のため最適化せず表示し、読み込み失敗時はデフォルト画像に切り替える
  */
-const ProjectImage = memo(({ src, title }) => (
-  <div className="relative h-48 overflow-hidden sm:h-56">
-    <Image
-      src={src}
-      alt={`${title}のスクリーンショット`}
-      layout="fill"
-      objectFit="cover"
-      className="transition-transform duration-300 transform group-hover:scale-105"
-      loading="lazy"
-    />
-    <div
-      className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"
-      aria-hidden="true"
-    />
-  </div>
-));
+const ProjectImage = memo(({ src, title }) => {
+  const [imgSrc, setImgSrc] = useState(src);
+
+  useEffect(() => {
+    setImgSrc(src);
+  }, [src]);
+
+  return (
+    <div className="relative h-48 overflow-hidden sm:h-56">
+      <Image
+        src={imgSrc}
+        alt={`${title}のスクリーンショット`}
+        fill
+        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+        className="object-cover transition-transform duration-300 transform group-hover:scale-105"
+        loading="lazy"
+        unoptimized={/^https:\/\//.test(imgSrc)}
+        referrerPolicy="no-referrer"
+        onError={() => setImgSrc(DEFAULT_IMAGE)}
+      />
+      <div
+        className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"
+        aria-hidden="true"
+      />
+    </div>
+  );
+});
 
 ProjectImage.displayName = 'ProjectImage';
 
@@ -100,21 +112,7 @@ ProjectCard.displayName = 'ProjectCard';
 /**
  * プロジェクトグリッドコンポーネント
  */
-const ProjectGrid = memo(({ projects, loading }) => {
-  if (loading) {
-    return (
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className="animate-pulse bg-white/5 rounded-xl h-[400px]"
-            aria-hidden="true"
-          />
-        ))}
-      </div>
-    );
-  }
-
+const ProjectGrid = memo(({ projects }) => {
   return (
     <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
       {projects.map((project) => (
@@ -128,24 +126,11 @@ ProjectGrid.displayName = 'ProjectGrid';
 
 /**
  * Worksセクションコンポーネント
- * プロジェクト一覧を表示する
+ * プロジェクト一覧を表示する（データはサーバー側の getStaticProps で取得）
+ * @param {Object} props
+ * @param {import("../data/projectsData").Project[]} props.projects
  */
-const WorksSection = () => {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    getProjects()
-      .then((data) => {
-        setProjects(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('プロジェクトデータの取得に失敗:', error);
-        setLoading(false);
-      });
-  }, []);
-
+const WorksSection = ({ projects = [] }) => {
   return (
     <section
       id="works"
@@ -154,7 +139,7 @@ const WorksSection = () => {
     >
       <div className="mx-auto max-w-7xl">
         <SectionHeader />
-        <ProjectGrid projects={projects} loading={loading} />
+        <ProjectGrid projects={projects} />
       </div>
     </section>
   );

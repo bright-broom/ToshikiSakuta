@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # 新たに公開された脆弱性を検知するため毎週月曜に実行
+    - cron: "0 0 * * 1"
+
+# GITHUB_TOKEN の権限を最小化
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # サプライチェーン攻撃対策としてアクションはコミットSHAで固定
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+
+      # lockfile どおりにインストールし、依存パッケージの install スクリプトは実行しない
+      - run: npm ci --ignore-scripts
+
+      - run: npm run security:audit
+
+      - run: npm audit signatures
+
+      - run: npm run build

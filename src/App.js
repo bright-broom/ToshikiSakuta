@@ -72,9 +72,11 @@ const useScrollSpy = (onSectionChange) => {
 
 /**
  * アプリケーションのルートコンポーネント
+ * @param {Object} props
+ * @param {import("./data/projectsData").Project[]} props.projects - Worksセクションに表示するプロジェクト
  * @returns {JSX.Element} アプリケーションの全体構造
  */
-function App() {
+function App({ projects }) {
   const [state, dispatch] = useReducer(mainReducer, initialState);
 
   // メモ化されたコールバック関数
@@ -110,7 +112,7 @@ function App() {
       />
       <main className="flex-grow mt-16">
         <HomeSection {...homeSectionProps} />
-        <WorksSection />
+        <WorksSection projects={projects} />
         <AboutSection />
       </main>
       <Footer />
