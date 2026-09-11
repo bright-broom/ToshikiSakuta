@@ -33,7 +33,7 @@ const MENU_ITEMS = [
     category: "icon",
     icon: "github",
     iconType: "fab",
-    href: "https://github.com/KoenigWolf",
+    href: "https://github.com/bright-broom",
   },
   {
     name: "Qiita",
@@ -41,13 +41,6 @@ const MENU_ITEMS = [
     icon: "qiita",
     iconType: "fas", // QiitaのFontAwesomeアイコンがないため "fas" に設定
     href: "https://qiita.com/KoenigWolf",
-  },
-  {
-    name: "Contact",
-    category: "icon",
-    icon: "envelope",
-    iconType: "fas",
-    href: "mailto:toshikiii7@gmail.com",
   },
 ];
 

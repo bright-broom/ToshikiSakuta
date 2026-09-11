@@ -31,7 +31,7 @@ graph TD
 
 ```bash
 # リポジトリのクローン
-git clone https://github.com/KoenigWolf/ToshikiSakuta.git
+git clone https://github.com/bright-broom/ToshikiSakuta.git
 
 # 依存関係のインストール
 npm install
