@@ -59,7 +59,7 @@ src/
 │   ├── works/              # ProjectCard / ProjectImage（Client）
 │   └── ui/                 # SectionHeading / SocialLinks
 ├── config/                 # 設定の一元管理
-│   ├── site.ts             # サイト名・説明・連絡先・外部リンク
+│   ├── site.ts             # サイト名・説明・外部リンク
 │   ├── navigation.ts       # セクション id・ナビゲーション・SNS リンク
 │   ├── security.ts         # CSP とセキュリティヘッダー
 │   ├── og-image.ts         # OG 画像取得の制限値・キャッシュ期間

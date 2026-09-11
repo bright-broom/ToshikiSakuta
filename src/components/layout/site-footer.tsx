@@ -40,7 +40,7 @@ export function SiteFooter() {
           </nav>
 
           <div className="text-center md:text-left">
-            <h2 className={HEADING}>{UI_LABELS.contactAndSocial}</h2>
+            <h2 className={HEADING}>{UI_LABELS.social}</h2>
             <SocialLinks className="flex justify-center space-x-5 md:justify-start" linkClassName={`${LINK} text-2xl`} />
           </div>
         </div>

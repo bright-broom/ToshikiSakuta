@@ -5,13 +5,13 @@ export type NavigationSection<Id extends string = string> = {
   label: string;
 };
 
-export type SocialIcon = "github" | "email";
+export type SocialIcon = "github";
 
 export type SocialLink = {
   /** リンク名（スクリーンリーダー向けラベル） */
   label: string;
-  /** https: または mailto: の URL */
-  href: `https://${string}` | `mailto:${string}`;
+  /** 外部サイトの URL（新しいタブで開く） */
+  href: `https://${string}`;
   icon: SocialIcon;
 };
 

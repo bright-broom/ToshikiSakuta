@@ -20,5 +20,4 @@ export const SECTIONS = [
 
 export const SOCIAL_LINKS = [
   { label: "GitHub", href: siteConfig.links.github, icon: "github" },
-  { label: "Contact", href: `mailto:${siteConfig.contactEmail}`, icon: "email" },
 ] as const satisfies readonly SocialLink[];

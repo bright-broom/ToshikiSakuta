@@ -2,9 +2,7 @@
 
 ## 脆弱性の報告
 
-脆弱性を発見した場合は、Issue や Pull Request では公開せず、以下へご連絡ください。
-
-- メール: toshikiii7@gmail.com
+脆弱性を発見した場合は、Issue や Pull Request では公開せず、リポジトリ管理者（[@bright-broom](https://github.com/bright-broom)）に非公開でご連絡ください。
 
 受領後、内容を確認のうえ対応状況をご連絡します。
 

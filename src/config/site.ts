@@ -11,7 +11,6 @@ export const siteConfig = {
   tagline: "創造性とテクノロジーで、より良い未来を創造します。",
   locale: "ja",
   openGraphLocale: "ja_JP",
-  contactEmail: "toshikiii7@gmail.com",
   links: {
     github: "https://github.com/bright-broom",
   },

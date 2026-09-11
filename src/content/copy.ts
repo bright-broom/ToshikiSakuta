@@ -29,7 +29,7 @@ export const UI_LABELS = {
   closeMenu: "メニューを閉じる",
   backToTop: "ページトップへ戻る",
   sitemap: "サイトマップ",
-  contactAndSocial: "Contact & Social",
+  social: "Social",
   techStack: "使用技術",
   opensInNewTab: (label: string) => `${label}（新しいタブで開く）`,
   screenshotAlt: (title: string) => `${title}のスクリーンショット`,

@@ -20,7 +20,7 @@ export const config = {
   matcher: [
     {
       // 静的ファイルとメタデータファイルは HTML を返さないため対象外
-      source: "/((?!_next/static|_next/image|images/|icon.svg|robots.txt|sitemap.xml|\\.well-known/).*)",
+      source: "/((?!_next/static|_next/image|images/|icon.svg|robots.txt|sitemap.xml).*)",
       missing: [
         { type: "header", key: "next-router-prefetch" },
         { type: "header", key: "purpose", value: "prefetch" },
