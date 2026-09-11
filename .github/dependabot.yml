@@ -4,6 +4,9 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # 公開直後の悪意あるバージョン（乗っ取り等）を取り込まないよう、公開から一定期間待ってから更新する
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 10
     groups:
       minor-and-patch:
@@ -13,3 +16,5 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
