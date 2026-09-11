@@ -22,7 +22,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      # サプライチェーン攻撃対策としてアクションはコミットSHAで固定
+      # サプライチェーン攻撃対策としてアクションはコミット SHA で固定
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
@@ -37,6 +37,10 @@ jobs:
 
       # 既知の脆弱性と、レジストリ署名・来歴（provenance）の検証
       - run: npm run security:audit
+
+      - run: npm run lint
+
+      - run: npm run typecheck
 
       - run: npm test
 

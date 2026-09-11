@@ -5,6 +5,10 @@
 /.next/
 /out/
 
+# TypeScript
+next-env.d.ts
+*.tsbuildinfo
+
 # Environment files (secrets)
 .env*
 !.env.example
