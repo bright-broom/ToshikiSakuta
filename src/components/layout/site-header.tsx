@@ -3,7 +3,7 @@
 import "@/lib/font-awesome";
 import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { SocialLinks } from "@/components/ui/social-links";
 import { SECTION_IDS, SECTIONS, type SectionId, sectionHref } from "@/config/navigation";
 import { siteConfig } from "@/config/site";
@@ -11,7 +11,6 @@ import { UI_LABELS } from "@/content/copy";
 import { useActiveSection } from "@/hooks/use-active-section";
 import { useEscapeKey } from "@/hooks/use-escape-key";
 
-const SECTION_ID_LIST = SECTIONS.map(({ id }) => id) as [SectionId, ...SectionId[]];
 const MOBILE_MENU_ID = "mobile-menu";
 
 const FOCUS_RING =
@@ -52,11 +51,20 @@ function SectionLinks({ activeSection, onNavigate, isMobile = false }: SectionLi
 }
 
 export function SiteHeader() {
-  const activeSection = useActiveSection(SECTION_ID_LIST);
+  const activeSection = useActiveSection(SECTIONS);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const closeMenu = () => setIsMenuOpen(false);
 
-  useEscapeKey(isMenuOpen ? closeMenu : null);
+  // Escape で閉じた場合は、閉じたメニュー内にフォーカスが残らないよう開閉ボタンに戻す
+  useEscapeKey(
+    isMenuOpen
+      ? () => {
+          closeMenu();
+          menuButtonRef.current?.focus();
+        }
+      : null,
+  );
 
   return (
     <header className="fixed top-0 z-50 w-full backdrop-blur-xs">
@@ -76,6 +84,7 @@ export function SiteHeader() {
             </nav>
 
             <button
+              ref={menuButtonRef}
               type="button"
               onClick={() => setIsMenuOpen((open) => !open)}
               className="inline-flex items-center justify-center rounded-md p-2 text-brand-200 transition-colors hover:bg-brand-800 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset md:hidden"

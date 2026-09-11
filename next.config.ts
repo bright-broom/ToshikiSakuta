@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
   agentRules: false,
   async headers() {
     // Content-Security-Policy はリクエストごとの nonce が必要なため src/proxy.ts で付与する
-    return [{ source: "/:path*", headers: STATIC_SECURITY_HEADERS }];
+    return [{ source: "/:path*", headers: [...STATIC_SECURITY_HEADERS] }];
   },
 };
 

@@ -2,15 +2,11 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { ProjectCard } from "@/components/works/project-card";
 import { SECTION_IDS } from "@/config/navigation";
 import { SECTION_HEADINGS } from "@/content/copy";
-import type { ProjectWithImage } from "@/types/content";
+import { PROJECTS } from "@/content/projects";
 
 const HEADING_ID = "works-heading";
 
-type WorksSectionProps = {
-  projects: readonly ProjectWithImage[];
-};
-
-export function WorksSection({ projects }: WorksSectionProps) {
+export function WorksSection() {
   return (
     <section
       id={SECTION_IDS.works}
@@ -20,7 +16,7 @@ export function WorksSection({ projects }: WorksSectionProps) {
       <div className="mx-auto max-w-7xl">
         <SectionHeading id={HEADING_ID} {...SECTION_HEADINGS.works} />
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
+          {PROJECTS.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
         </div>

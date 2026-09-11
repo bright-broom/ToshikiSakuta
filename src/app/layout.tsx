@@ -13,10 +13,8 @@ export const metadata: Metadata = {
   title: siteConfig.title,
   description: siteConfig.description,
   authors: [{ name: siteConfig.name, url: siteConfig.links.github }],
-  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
-    url: "/",
     siteName: siteConfig.name,
     title: siteConfig.title,
     description: siteConfig.description,
@@ -24,14 +22,18 @@ export const metadata: Metadata = {
   },
 };
 
-// CSP の nonce はリクエストごとに発行されるため、全ページ（404 を含む）をリクエスト時にレンダリングする
+// CSP の nonce はリクエストごとに発行され、Next.js はレンダリング時にそれを script / style に付与する。
+// 静的に生成した HTML には nonce を付けられないため、404 を含む全ページをリクエスト時にレンダリングする
 export const instant = false;
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   await connection();
 
   return (
-    <html lang={siteConfig.locale} className={`${inter.variable} scroll-pt-header-lg motion-safe:scroll-smooth`}>
+    <html
+      lang={siteConfig.locale}
+      className={`${inter.variable} scroll-pt-header motion-safe:scroll-smooth sm:scroll-pt-header-lg`}
+    >
       <body className="font-sans">{children}</body>
     </html>
   );

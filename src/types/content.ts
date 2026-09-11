@@ -27,16 +27,18 @@ export type TimelineEntry = {
   description: string;
 };
 
+export type ProjectImage = {
+  /** public/ 配下の画像パス */
+  src: `/images/${string}`;
+  width: number;
+  height: number;
+};
+
 export type Project = {
   id: string;
   title: string;
   description: string;
-  /** サイト URL（OG 画像の取得元。https のみ） */
   url: `https://${string}`;
+  image: ProjectImage;
   tags: readonly string[];
-};
-
-export type ProjectWithImage = Project & {
-  /** 表示する画像の URL（OG 画像、または代替画像） */
-  imageSrc: string;
 };

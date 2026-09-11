@@ -6,7 +6,7 @@ import { buildContentSecurityPolicy, createNonce } from "@/config/security";
  * Next.js はリクエストヘッダーの CSP から nonce を読み取り、自身が出力する script / style に付与する
  */
 export function proxy(request: NextRequest) {
-  const contentSecurityPolicy = buildContentSecurityPolicy(createNonce());
+  const contentSecurityPolicy = buildContentSecurityPolicy({ nonce: createNonce() });
 
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("Content-Security-Policy", contentSecurityPolicy);
@@ -19,8 +19,9 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     {
-      // 静的ファイルとメタデータファイルは HTML を返さないため対象外
-      source: "/((?!_next/static|_next/image|images/|icon.svg|robots.txt|sitemap.xml).*)",
+      // HTML を返さない静的ファイルだけを完全一致で除外する（前方一致にすると同名で始まるページの 404 に CSP が付かない）
+      source:
+        "/((?!_next/static/|images/projects/[\\w-]+\\.webp$|icon\\.svg$|robots\\.txt$|sitemap\\.xml$).*)",
       missing: [
         { type: "header", key: "next-router-prefetch" },
         { type: "header", key: "purpose", value: "prefetch" },

@@ -18,9 +18,12 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     permissions:
       contents: read
+    env:
+      # 本番ビルドでは公開 URL が必須のため、CI では検証用の値を明示する
+      NEXT_PUBLIC_SITE_URL: http://localhost:3100
     steps:
       # サプライチェーン攻撃対策としてアクションはコミット SHA で固定
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -32,8 +35,9 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
 
-      # lockfile どおりにインストールする（install スクリプトは .npmrc で無効化済み）
-      - run: npm ci
+      # lockfile どおりにインストールし、依存パッケージの install スクリプトは実行しない
+      # （.npmrc でも無効化しているが、設定変更で気づかずに外れないよう CI でも明示する）
+      - run: npm ci --ignore-scripts
 
       # 既知の脆弱性と、レジストリ署名・来歴（provenance）の検証
       - run: npm run security:audit
@@ -45,3 +49,6 @@ jobs:
       - run: npm test
 
       - run: npm run build
+
+      # 本番ビルドをインストール済みの Google Chrome で検証する（CSP 違反・ナビゲーション・404）
+      - run: npm run test:e2e

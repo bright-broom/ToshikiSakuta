@@ -1,9 +1,8 @@
-import { ProjectImage } from "@/components/works/project-image";
 import { UI_LABELS } from "@/content/copy";
-import type { ProjectWithImage } from "@/types/content";
+import type { Project } from "@/types/content";
 
 type ProjectCardProps = {
-  project: ProjectWithImage;
+  project: Project;
 };
 
 export function ProjectCard({ project }: ProjectCardProps) {
@@ -18,7 +17,20 @@ export function ProjectCard({ project }: ProjectCardProps) {
         className="block rounded-xl focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand-600 focus:outline-hidden"
         aria-labelledby={titleId}
       >
-        <ProjectImage src={project.imageSrc} title={project.title} />
+        <div className="relative h-48 overflow-hidden sm:h-56">
+          {/* 画像最適化 API（/_next/image）は攻撃対象を減らすため無効化しており、next/image は使わない */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={project.image.src}
+            width={project.image.width}
+            height={project.image.height}
+            alt={UI_LABELS.screenshotAlt(project.title)}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 size-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" aria-hidden="true" />
+        </div>
 
         <div className="relative p-6">
           <h3 id={titleId} className="mb-2 text-xl font-semibold text-white">

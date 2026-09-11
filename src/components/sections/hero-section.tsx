@@ -22,7 +22,7 @@ export function HeroSection() {
     >
       <div className="relative mx-auto max-w-7xl text-center">
         <h1 id={HEADING_ID} className="group inline-flex flex-col items-center">
-          <span className="mb-4 text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+          <span className="mb-4 text-4xl font-bold tracking-tight text-white uppercase sm:text-5xl md:text-6xl lg:text-7xl">
             {HERO_COPY.heading}
           </span>
           <span
@@ -30,7 +30,7 @@ export function HeroSection() {
             aria-hidden="true"
           />
         </h1>
-        <p className="mt-6 text-xl font-light tracking-wider text-brand-200 sm:text-2xl md:text-3xl">
+        <p className="mt-6 text-xl font-light tracking-wider text-brand-200 uppercase sm:text-2xl md:text-3xl">
           {HERO_COPY.subheading}
         </p>
 

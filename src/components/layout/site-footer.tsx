@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SocialLinks } from "@/components/ui/social-links";
 import { SECTION_IDS, SECTIONS, sectionHref } from "@/config/navigation";
 import { siteConfig } from "@/config/site";
-import { UI_LABELS } from "@/content/copy";
+import { FOOTER_COPY, UI_LABELS } from "@/content/copy";
 
 const HEADING = "mb-4 text-lg font-semibold text-white";
 const LINK = "text-brand-200 transition-colors duration-200 hover:text-white";
@@ -22,8 +22,8 @@ export function SiteFooter() {
       <div className="mx-auto max-w-7xl px-6 pt-20 pb-10 sm:px-10 lg:px-14">
         <div className="mb-10 grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-14">
           <div className="text-center md:text-left">
-            <p className="mb-4 text-2xl font-bold tracking-wide text-white">{siteConfig.displayName}</p>
-            <p className="mx-auto max-w-md text-sm text-brand-200 md:mx-0">{siteConfig.tagline}</p>
+            <p className="mb-4 text-2xl font-bold tracking-wide text-white uppercase">{siteConfig.name}</p>
+            <p className="mx-auto max-w-md text-sm text-brand-200 md:mx-0">{FOOTER_COPY.tagline}</p>
           </div>
 
           <nav className="text-center md:text-left" aria-label={UI_LABELS.sitemap}>
@@ -46,7 +46,7 @@ export function SiteFooter() {
         </div>
 
         <p className="border-t border-white/10 pt-10 text-center text-sm text-brand-200">
-          {UI_LABELS.copyright(new Date().getFullYear())}
+          &copy; {new Date().getFullYear()} <span className="uppercase">{siteConfig.name}</span>. {FOOTER_COPY.rightsReserved}
         </p>
       </div>
     </footer>
