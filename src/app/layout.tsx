@@ -2,14 +2,19 @@ import "@/lib/font-awesome";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { connection } from "next/server";
-import { getSiteUrl } from "@/config/env";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  metadataBase: getSiteUrl(),
+  // 検索エンジンにインデックスさせない（X-Robots-Tag ヘッダーと proxy による遮断に加えた多層防御）
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: { index: false, follow: false, noimageindex: true },
+  },
   title: siteConfig.title,
   description: siteConfig.description,
   authors: [{ name: siteConfig.name, url: siteConfig.links.github }],
