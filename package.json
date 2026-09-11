@@ -2,11 +2,14 @@
   "name": "create-project",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "security:audit": "npm audit --audit-level=moderate"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
@@ -14,7 +17,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "classnames": "^2.5.1",
-    "next": "14.0.4",
+    "next": "^16.3.4",
     "react": "^18",
     "react-dom": "^18"
   },
