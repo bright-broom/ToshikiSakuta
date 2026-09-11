@@ -36,11 +36,7 @@ npm run dev      # http://localhost:3000
 | `npm run check` | lint・型チェック・ユニットテストをまとめて実行 |
 | `npm run security:audit` | 依存パッケージの脆弱性・署名検証 |
 
-### 環境変数
-
-| 変数 | 用途 | 既定値 |
-| --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | 公開 URL（metadataBase / canonical / sitemap / robots） | Vercel では本番ドメイン、開発時は `http://localhost:3000`。それ以外の本番ビルドでは**必須**（未設定だとビルドが失敗します。`.env.example` 参照） |
+環境変数の設定は不要です。
 
 ## 設計
 
@@ -53,8 +49,8 @@ src/
 │   ├── page.tsx            # トップページ
 │   ├── globals.css         # Tailwind CSS とデザイントークン（@theme）
 │   ├── not-found.tsx / error.tsx / global-error.tsx  # CSP に適合したエラー画面
-│   ├── icon.svg / robots.ts / sitemap.ts
-├── proxy.ts                # リクエストごとの CSP nonce 発行
+│   ├── icon.svg / robots.ts
+├── proxy.ts                # クローラー・検索流入の遮断と、リクエストごとの CSP nonce 発行
 ├── components/
 │   ├── layout/             # SiteHeader（Client）/ SiteFooter
 │   ├── sections/           # HeroSection / WorksSection / AboutSection
@@ -64,16 +60,16 @@ src/
 │   ├── site.ts             # サイト名・説明・外部リンク
 │   ├── navigation.ts       # セクション id・ナビゲーション・SNS リンク
 │   ├── security.ts         # CSP とセキュリティヘッダー
-│   └── env.ts              # 環境変数の読み取りと検証
+│   └── crawler-policy.ts   # 検索エンジン対策（クローラー・検索サイト・X-Robots-Tag）
 ├── content/                # 表示する文言・データ
 │   ├── copy.ts             # 見出し・ボタン・フッター・エラー画面・アクセシビリティ用ラベル
 │   ├── profile.ts          # 自己紹介・スキル・経歴
 │   └── projects.ts         # 制作実績（スクリーンショットは public/images/projects/）
 ├── hooks/                  # useActiveSection / useEscapeKey
-├── lib/                    # Font Awesome の共通設定
+├── lib/                    # リクエストの判定（request-guard）と Font Awesome の共通設定
 └── types/                  # コンテンツの型定義
-tests/                      # ユニットテスト（CSP・環境変数）
-e2e/                        # E2E テスト（CSP 違反・ナビゲーション・404）
+tests/                      # ユニットテスト（CSP・クローラー判定）
+e2e/                        # E2E テスト（検索エンジン対策・CSP 違反・ナビゲーション・404）
 ```
 
 ### 方針
@@ -99,6 +95,19 @@ graph TD
     P --> A
     P --> F
 ```
+
+## 検索エンジン対策
+
+サイトは公開しますが、**検索エンジンからの流入は受け付けません**。以下を多層で実施しています（詳細は [SECURITY.md](./SECURITY.md)）。
+
+| 層 | 対策 |
+| --- | --- |
+| インデックス拒否 | 全レスポンス（HTML・画像・静的ファイル）に `X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex`、HTML に robots メタタグ |
+| クローラー遮断 | 検索エンジン・AI 検索・AI 学習・SEO ツール・アーカイブのクローラーを `proxy.ts` で 403 |
+| 検索流入の遮断 | 検索サイト・AI 検索からの遷移（Referer / `utm_source`）を 403。万一インデックスされても検索結果からは表示できない |
+| 案内しない | サイトマップ・canonical を出力しない。robots.txt は主要検索エンジン以外を全面拒否 |
+
+クローラーや検索サイトの一覧は `src/config/crawler-policy.ts` で管理しています。
 
 ## セキュリティ
 

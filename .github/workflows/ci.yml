@@ -21,9 +21,6 @@ jobs:
     timeout-minutes: 20
     permissions:
       contents: read
-    env:
-      # 本番ビルドでは公開 URL が必須のため、CI では検証用の値を明示する
-      NEXT_PUBLIC_SITE_URL: http://localhost:3100
     steps:
       # サプライチェーン攻撃対策としてアクションはコミット SHA で固定
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
