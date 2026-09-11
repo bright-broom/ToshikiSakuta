@@ -1,22 +1,22 @@
 {
-  "name": "create-project",
+  "name": "toshiki-sakuta-portfolio",
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=20.9.0"
+    "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --hostname localhost",
     "build": "next build",
     "start": "next start",
-    "security:audit": "npm audit --audit-level=moderate"
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test tests/*.test.mjs",
+    "security:audit": "npm audit --audit-level=moderate && npm audit signatures"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
-    "classnames": "^2.5.1",
     "next": "^16.3.4",
     "react": "^18",
     "react-dom": "^18"

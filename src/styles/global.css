@@ -1,54 +1,17 @@
-/* =============================
-   Tailwind ベースの適用
-============================= */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* =============================
-   グラデーションアニメーション
-============================= */
-@keyframes gradient {
-   0% {
-      background-position: 0% 50%;
-   }
-   50% {
-      background-position: 100% 50%;
-   }
-   100% {
-      background-position: 0% 50%;
-   }
-}
-
-/* =============================
-   グローバルスタイル
-============================= */
 @layer base {
-   /* 基本設定 */
    html {
       scroll-behavior: smooth;
+      /* 固定ヘッダーの高さ分、ページ内リンクの遷移位置をずらす */
       scroll-padding-top: 80px;
-      /* 固定ヘッダーがある場合のスクロール調整 */
    }
 
-   body {
-      @apply font-sans;
-      /* Tailwind のフォント設定を適用 */
-      animation: gradient 15s ease infinite;
-      background-size: 400% 400%;
-      margin: 0;
-      padding: 0;
-   }
-
-   /* リンクスタイル */
-   a {
-      color: inherit;
-      text-decoration: none;
-      transition: color 0.3s ease-in-out;
-   }
-
-   a:hover {
-      color: #1d4ed8;
-      /* ホバー時のリンクカラー */
+   @media (prefers-reduced-motion: reduce) {
+      html {
+         scroll-behavior: auto;
+      }
    }
 }

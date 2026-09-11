@@ -1,144 +1,85 @@
 # 🚀 Toshiki Sakuta Portfolio
 
-このリポジトリは、最新のWeb技術とベストプラクティスを活用したポートフォリオサイトです。
+Next.js で構築したポートフォリオサイトです。
 
 ## 🛠 技術スタック
 
-### フロントエンド
-- **Next.js** - Reactベースのフレームワーク
-- **React** - UIライブラリ
-- **TailwindCSS** - ユーティリティファーストCSSフレームワーク
-- **Font Awesome** - アイコンライブラリ
-
-### 設計・アーキテクチャ
-```mermaid
-graph TD
-    A[App.js] --> B[Components]
-    A --> C[Hooks]
-    A --> D[Data]
-    B --> E[Header]
-    B --> F[Sections]
-    B --> G[Footer]
-    C --> H[useScrollSpy]
-    C --> I[useAnimation]
-    C --> J[useEscapeKey]
-    D --> K[menuItems]
-    D --> L[aboutData]
-    D --> M[projectsData]
-```
+- **Next.js 16**（Pages Router / Turbopack / ISR）
+- **React 18**
+- **Tailwind CSS 3**
+- **Font Awesome**（SVG アイコン）
 
 ## 🔧 開発環境セットアップ
 
+Node.js 22.12 以上（推奨: `.nvmrc` の 24）が必要です。
+
 ```bash
-# リポジトリのクローン
-git clone https://github.com/KoenigWolf/ToshikiSakuta.git
-
-# 依存関係のインストール
-npm install
-
-# 開発サーバーの起動
-npm run dev
+git clone git@github.com:bright-broom/ToshikiSakuta.git
+cd ToshikiSakuta
+npm ci
+npm run dev   # http://localhost:3000
 ```
 
-## 📝 コーディング規約
+| コマンド | 内容 |
+| --- | --- |
+| `npm run dev` | 開発サーバー（localhost のみで待ち受け） |
+| `npm run build` | 本番ビルド |
+| `npm start` | 本番サーバー |
+| `npm test` | ユニットテスト（`node:test`） |
+| `npm run security:audit` | 依存パッケージの脆弱性・署名検証 |
 
-### コンポーネント設計
-- 単一責任の原則に従う
-- Propsの型定義とJSDocによるドキュメント化
-- メモ化による最適化
-- アクセシビリティ対応
+## 🏗 設計
 
-### ファイル構成
+### ディレクトリ構成
+
 ```
 src/
-├── components/     # UIコンポーネント
-├── data/          # 静的データ
-├── hooks/         # カスタムフック
-├── pages/         # Next.jsページ
-├── reducers/      # 状態管理
-└── styles/        # グローバルスタイル
+├── pages/                  # ルーティング
+│   ├── _app.js             # 共通フォント・スタイル
+│   ├── _document.js        # <html lang="ja">
+│   └── index.js            # トップページ（getStaticProps で制作実績の OG 画像を取得）
+├── components/
+│   ├── layout/             # Header / Footer
+│   ├── sections/           # HomeSection / WorksSection / AboutSection
+│   └── ui/                 # 複数箇所で使う小さな部品（SectionHeading / SocialLinks）
+├── hooks/                  # useActiveSection / useEscapeKey
+├── data/                   # 表示内容（ナビゲーション・プロフィール・制作実績）
+├── lib/                    # サーバー側専用の処理（ogImage）
+└── styles/                 # グローバル CSS
+tests/                      # lib のユニットテスト
 ```
 
-## 🔄 CI/CD パイプライン
+### データの流れ
 
-GitHub Actionsを使用した自動化：
-1. コードの静的解析（ESLint）
-2. ユニットテスト実行
-3. ビルド確認
-4. Vercelへの自動デプロイ
+```mermaid
+graph TD
+    P[data/projects.js] --> S[pages/index.js<br/>getStaticProps]
+    O[lib/ogImage.js] --> S
+    S -->|projects| W[WorksSection]
+    N[data/navigation.js] --> H[Header]
+    N --> F[Footer]
+    R[data/profile.js] --> A[AboutSection]
+    AS[hooks/useActiveSection] --> H
+```
 
-## 🎯 パフォーマンス最適化
+- 表示内容は `src/data/` に集約し、コンポーネントは表示に専念します。
+- 外部サイトへのアクセス（OG 画像の URL 取得）は `getStaticProps` でのみ行い、1 日ごとに再生成（ISR）します。
+- ページ内の移動は `<a href="#id">` と CSS の `scroll-behavior` で実現し、現在のセクションはヘッダー内で判定します。
 
-### 実装済みの最適化
-- コンポーネントのメモ化（React.memo）
-- イベントハンドラの最適化（useCallback）
-- 派生状態のメモ化（useMemo）
-- 画像の遅延読み込み
-- スクロールイベントのデバウンス処理
+## 🔒 セキュリティ
 
-### Lighthouse スコア
-- Performance: 98
-- Accessibility: 100
-- Best Practices: 100
-- SEO: 100
+詳細は [SECURITY.md](./SECURITY.md) を参照してください。セキュリティヘッダーは `next.config.js` で設定しています。
 
-## 🔒 セキュリティ対策
+## 🤝 コミット規約
 
-- Content Security Policy (CSP)の実装
-- HTTPS強制
-- クロスサイトスクリプティング（XSS）対策
-- 依存パッケージの定期的な脆弱性チェック
+gitmoji を使用します。
 
-## 🤝 コントリビューションガイドライン
-
-### コミット規約
-gitmojiを使用した意味のある絵文字とコミットメッセージ：
 - ♻️ リファクタリング
 - 🎨 コードスタイル
 - ⚡️ パフォーマンス改善
 - 🐛 バグ修正
 - ✨ 新機能
-
-### プルリクエストプロセス
-1. Issueの作成と議論
-2. ブランチの作成（feature/**, fix/**）
-3. コードレビュー
-4. CIチェック
-5. マージ
-
-## 🎨 システム設計の考え方
-
-### アーキテクチャ原則
-- 関心の分離
-- 単一責任の原則
-- DRY (Don't Repeat Yourself)
-- KISS (Keep It Simple, Stupid)
-
-### 状態管理戦略
-- useReducerによるグローバル状態管理
-- コンポーネントローカル状態の適切な使用
-- メモ化による再レンダリング最適化
-
-## 📊 パフォーマンスモニタリング
-
-### ツール
-- Lighthouse CI
-- WebPageTest
-- Google Analytics
-- Sentry
-
-## 🚦 品質管理
-
-### テスト戦略
-- Jest + React Testing Library
-- Cypress for E2E
-- Storybook for Visual Testing
-
-### コードレビュー基準
-- パフォーマンス影響
-- アクセシビリティ
-- セキュリティ
-- 保守性
+- 🔒 セキュリティ
 
 ## 📄 ライセンス
 
