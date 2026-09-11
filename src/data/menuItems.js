@@ -35,13 +35,6 @@ const MENU_ITEMS = [
     iconType: "fab",
     href: "https://github.com/bright-broom",
   },
-  {
-    name: "Qiita",
-    category: "icon",
-    icon: "qiita",
-    iconType: "fas", // QiitaのFontAwesomeアイコンがないため "fas" に設定
-    href: "https://qiita.com/KoenigWolf",
-  },
 ];
 
 export default MENU_ITEMS;
