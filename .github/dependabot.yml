@@ -4,8 +4,34 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # 公開直後の悪意あるバージョン（乗っ取り等）を取り込まないよう、公開から一定期間待ってから更新する
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 10
+    # 互換性の都合で現時点では上げられないメジャー更新
+    ignore:
+      # typescript-eslint（eslint-config-next が依存）の対応範囲が typescript <6.1.0
+      - dependency-name: typescript
+        versions: [">=6.1.0"]
+      # eslint-plugin-react / import / jsx-a11y が ESLint 10 に未対応
+      - dependency-name: eslint
+        versions: [">=10.0.0"]
+      # 実行環境（.nvmrc / engines）の Node.js 24 に型定義を合わせる
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+    # 同時に更新しないとインストールやビルドが壊れるパッケージは、メジャー更新も含めて 1 つの PR にまとめる。
+    # パッケージは最初に一致したグループに入るため、個別グループを先に、残りのマイナー・パッチ更新を最後に定義する
     groups:
+      react:
+        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
+      next:
+        patterns: ["next", "eslint-config-next", "@next/*"]
+      font-awesome:
+        patterns: ["@fortawesome/*"]
+      tailwind:
+        patterns: ["tailwindcss", "@tailwindcss/*"]
+      toolchain:
+        patterns: ["eslint", "typescript", "@types/node", "@playwright/test"]
       minor-and-patch:
         update-types: [minor, patch]
 
@@ -13,3 +39,5 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7

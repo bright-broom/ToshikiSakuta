@@ -1,37 +1,28 @@
-# Node.js dependencies
+# Dependencies
 /node_modules
-/.pnp
-.pnp.js
-
-# Yarn specific files
-.yarn/install-state.gz
-
-# Testing coverage
-/coverage
 
 # Next.js build outputs
 /.next/
 /out/
 
-# Production build
-/build
-
-# Miscellaneous
-.DS_Store
-*.pem
-
-# Debug logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# TypeScript
+next-env.d.ts
+*.tsbuildinfo
 
 # Environment files (secrets)
 .env*
 !.env.example
+*.pem
 
-# Vercel configuration
+# Vercel
 .vercel
 
-# TypeScript specific files
-*.tsbuildinfo
-next-env.d.ts
+# Logs
+npm-debug.log*
+
+# OS
+.DS_Store
+
+# Playwright
+/test-results/
+/playwright-report/
